@@ -2,12 +2,18 @@
 const express=require('express');
 const mongoose=require('mongoose');
 var student=require('./database/operations');
+var user=require('./database/authschema');
+var cookieParser = require('cookie-parser');
+
+var session = require('express-session');
 const http=require('http');
 const fs=require('fs');
 mongoose.connect('mongodb://localhost/crud',{ useNewUrlParser: true });
-var student=require('./database/operations');
+
 
 const bodyparser=require('body-parser');
+var passport=require('passport');
+require('./passport')(passport);
 
 
 const app=express();
@@ -16,15 +22,49 @@ const app=express();
 
 //middleware
 mongoose.Promise=global.Promise;
+//session
+app.use(session({ secret: "cats" ,
+resave:false,
+saveUninitialized:false
+}));
+//passport
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(bodyparser.urlencoded({extended:true}));
 app.set('view engine','ejs');
 
- //home page
+ //home page routing
     app.get('/',function(req,res){
 
-        res.sendFile(__dirname + '/views/index.html');
+        res.render('start');
             console.log('home page routed');
-    });
+    })
+
+    app.get('/login',function (res,res) {
+        
+        res.render('login');
+        console.log('login page routed');
+    })
+    app.get('/register',function (res,res) {
+        
+        res.render('register');
+        console.log('register page routed');
+    })
+    app.post('/login',
+    passport.authenticate('login',
+   {
+     
+        successRedirect: '/home',
+        failureRedirect: '/login' 
+    }));
+
+
+
+
+
+
+
 //retrive all stuents
     app.get('/get-all',function(req,res){
 
