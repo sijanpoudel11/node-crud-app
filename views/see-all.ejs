@@ -7,8 +7,13 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="/login">login to manipulate the records</a><br>
-    <a href="/register">register here</a><br>
-    <a href="/see-all">see all records</a><br>
+   <ul>
+    <% persons.forEach(function(person){ %>
+     <li><%= person._id  %> </li>
+        <li> <%= person.name  %> </li>
+        <li><%= person.roll  %></li>
+     <hr>
+        <% })%>
+   </ul>
 </body>
 </html>

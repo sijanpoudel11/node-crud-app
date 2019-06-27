@@ -57,7 +57,14 @@ app.set('view engine','ejs');
      
         successRedirect: '/home',
         failureRedirect: '/login' 
-    }));
+    }))
+    app.post('/register',
+    passport.authenticate('register',
+   {
+     
+        successRedirect: '/login',
+        failureRedirect: '/register' 
+    }))
 
 
 
@@ -71,6 +78,20 @@ app.set('view engine','ejs');
         student.find({})
         .then(persons=>{
             res.render('retrive',{persons});
+        })
+        .catch(error=>{
+            res.send(error);
+        })
+
+
+    
+    })
+
+    app.get('/see-all',function(req,res){
+
+        student.find({})
+        .then(persons=>{
+            res.render('see-all',{persons});
         })
         .catch(error=>{
             res.send(error);

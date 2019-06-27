@@ -10,14 +10,15 @@ var bcrypt = require('bcrypt-nodejs');
          required:true
      }
    
+   
  });
  userschema.methods.generateHash = function(password){
 
     return bcrypt.hashSync(password,bcrypt.genSaltSync(8),null);
 
-};
+}; 
 
-userschema.methods.validPassword = function(password){
+userschema.methods.validPassword = function(password,hash){
 
     return bcrypt.compareSync(password, this.password);
 
